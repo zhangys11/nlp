@@ -36,7 +36,7 @@ Text Classification - Drug Fact Sheets.ipynb
 <img src='case_study\food_additives\design.png'>
 
 相关材料：/case_study/food_additive/  TODO:数据为2020年之前，需更新。  
-文本分类（判定抓取的文本是否食品安全主题相关）：Text Classification.ipynb  
+文本分类（判定抓取的文本是否食品安全主题相关）：Text Classification.ipynb  TODO: use BERT finetuned model   
 语义关系提取：http://spacs.brahma.pub/association/   
 可视化：http://spacs.brahma.pub/v/force/ 
 
