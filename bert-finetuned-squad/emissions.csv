@@ -1,0 +1,2 @@
+timestamp,experiment_id,project_name,duration,emissions,energy_consumed,country_name,country_iso_code,region,on_cloud,cloud_provider,cloud_region
+2021-09-26T12:52:33,aa9af4c4-d2dc-483d-8e98-3cf8e80e8450,codecarbon,4199.053839206696,0.07392685048385692,0.351236599583516,United States,USA,new york,N,,
