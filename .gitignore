@@ -128,3 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .svn/
+bert-finetuned-squad/pytorch_model.bin
+checkpoint/124M/model.ckpt.data-00000-of-00001
+checkpoint/run1/model-1000.data-00000-of-00001
+gpt2_flask/GPT2/gpt2-pytorch_model.bin
+squad_dataset.pickle
