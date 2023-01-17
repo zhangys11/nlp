@@ -28,6 +28,14 @@ Topic Models - Food Safety.ipynb
 Text Classification.ipynb 食品添加剂案例  
 Text Classification - Drug Fact Sheets.ipynb
 
+## 7. BERT预训练模型
+
+BERT.ipynb squad QA finetune案例   
+
+## 8. GPT模型
+
+GPT.ipynb 英文、中文预训练模型；Flask应用     
+
 # 案例研究：食品添加剂
 
 聚焦食品中有害化学物质的检验，包括农残、抗生素、霉菌毒素、食品添加剂等。
