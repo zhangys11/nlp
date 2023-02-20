@@ -153,3 +153,8 @@ GPT2-Chinese/models/gpt2通用中文模型/pytorch_model.bin
 GPT2-Chinese/models/gpt2通用中文模型/vocab.txt
 BERT-wwm-chinese/bert_model.ckpt.data-00000-of-00001
 BERT-wwm-chinese/pytorch_model.bin
+case_study/food_additives/20230216230228.h5
+case_study/food_additives/20230216220818.h5
+case_study/food_additives/20230216215008.h5
+case_study/food_additives/FoodSafetyAriticles2018.h5
+case_study/food_additives/FoodSafetyAriticles2023.h5
