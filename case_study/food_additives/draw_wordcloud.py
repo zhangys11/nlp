@@ -1,10 +1,11 @@
 # Import the wordcloud library
+import os.path
 from wordcloud import WordCloud # Join the different processed titles together.
 from matplotlib import pyplot as plt
 
 def draw_wordcloud(long_string, stpwrdlst, width = 2400, height = 2000, savefile = None):    
 
-    font = r'C:\Windows\Fonts\simhei.ttf'
+    font = os.path.dirname(os.path.realpath(__file__)) + '/simfang.ttf' # r'C:\Windows\Fonts\simhei.ttf'
     
     wc = wordcloud = WordCloud(
         background_color="white", 
