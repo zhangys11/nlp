@@ -22,3 +22,6 @@ Contributions：
 
 基于Force-directed graph的交互式可视化工具。
 <img src='fdg.gif'>
+
+可重现的Code Ocean Capsule:  
+[10.24433/CO.4102110.v1](https://doi.org/10.24433/CO.4102110.v1)
