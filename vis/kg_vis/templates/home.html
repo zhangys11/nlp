@@ -56,6 +56,8 @@
             $('#dataFile').change(function () {
             $('#dataFileCover').val($(this).val());
             });
+
+            draw();
         });
 
 
@@ -82,32 +84,43 @@
             var categories_symbolSizes = {};
             var categories_names = ['Food', 'Chemical'];
             var links = [];
-            v_max = 1;
+            
+            v_max = 1; // max accumulated vertice value
+            e_max = 1; // max edge value
+
             for (var i = 0; i < data.length; i++) {
                 var s = String(data[i][0]);
                 var t = String(data[i][1]);
-                var v = data[i][2];
+                var v = parseInt(data[i][2]);
 
-                if (parseInt(v) < min_sup) {
+                if (v < min_sup) {
                     continue;
                 }
 
-                if (v_max < v) {
-                    v_max = v;
+                if (e_max < v) {
+                    e_max = v;
                 }
 
                 if (s in vertices) {
-                    vertices[s] += parseInt(v);
+                    vertices[s] += v;
+
+                    if (v_max < vertices[s]) {
+                        v_max = vertices[s];
+                    }
                 }
                 else {
-                    vertices[s] = parseInt(v);
+                    vertices[s] = v;
                 }
 
                 if (t in vertices) {
-                    vertices[t] += parseInt(v);
+                    vertices[t] += v;
+
+                    if (v_max < vertices[t]) {
+                        v_max = vertices[t];
+                    }
                 }
                 else {
-                    vertices[t] = parseInt(v);
+                    vertices[t] = v;
                 }
 
                 categories[s] = 0; // food
@@ -119,7 +132,7 @@
                 links.push({
                     'source': s, 'target': t, 'value': v,
                     'lineStyle': {
-                        'width': v,
+                        'width': v / min_sup + 1, // to avoid too thick edges
                         'curveness': 0.1, // between 0 and 1
                         //shadowColor: 'rgba(0, 0, 0, 0.5)',
                         //shadowBlur: 5,
@@ -136,7 +149,7 @@
                     'value': v,
                     'catogery': categories[k],
                     'symbol': categories_symbols[categories[k]],
-                    'symbolSize': v, //v*40 / v_max + 1, 
+                    'symbolSize': v * 50 / v_max + 3, 
                     'itemStyle': {
                         'color': categories_colors[categories[k]],
                     },
@@ -341,7 +354,7 @@
                                 </span>
                             </h6>
                             <div class="row">
-                                <input type="range" min="10" max="200" value="20" class="slider"
+                                <input type="range" min="1" max="200" value="20" class="slider"
                                     oninput="$('#min_sup_label').html(this.value);" id="min_sup" name="min_sup">
                             </div>
 
