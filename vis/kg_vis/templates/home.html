@@ -10,6 +10,7 @@
     <script src="/static/bootstrap.js"></script>
     <script src="/static/jquery.blockUI.js"></script>
     <script src="/static/jquery.form.min.js"></script>
+    <script src="/static/echarts.min.js"></script>
 
     <script>
         $(function () {
@@ -57,11 +58,145 @@
             });
         });
 
-        function load_excel(){
-            // data = pd.read_excel(path)            
-            // $('#kg_result').html(data.to_html());
+
+        function draw() {
+            var text = $("#graph-input").val();
+            var data = eval(text);
+            
+            var min_sup = $('#min_sup').val();
+            if (min_sup < 1){
+                min_sup = 1;
+            }
+
+            var graph = data2Graph(data, min_sup);
+            drawGraph(graph);
         }
 
+        function data2Graph(data, min_sup) {
+            var graph = {};
+            var vertices = {};
+            var categories = {};
+            var categories_colors = ['rgba(80, 128, 128, 1)',
+                'rgba(128, 80, 80, 1)'];
+            var categories_symbols = ['circle', 'diamond']; // 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
+            var categories_symbolSizes = {};
+            var categories_names = ['Food', 'Chemical'];
+            var links = [];
+            v_max = 1;
+            for (var i = 0; i < data.length; i++) {
+                var s = String(data[i][0]);
+                var t = String(data[i][1]);
+                var v = data[i][2];
+
+                if (parseInt(v) < min_sup) {
+                    continue;
+                }
+
+                if (v_max < v) {
+                    v_max = v;
+                }
+
+                if (s in vertices) {
+                    vertices[s] += parseInt(v);
+                }
+                else {
+                    vertices[s] = parseInt(v);
+                }
+
+                if (t in vertices) {
+                    vertices[t] += parseInt(v);
+                }
+                else {
+                    vertices[t] = parseInt(v);
+                }
+
+                categories[s] = 0; // food
+                categories[t] = 1; // chemical
+
+
+                //
+                // api doc: https://echarts.apache.org/zh/option.html#series-graph.nodes
+                links.push({
+                    'source': s, 'target': t, 'value': v,
+                    'lineStyle': {
+                        'width': v,
+                        'curveness': 0.1, // between 0 and 1
+                        //shadowColor: 'rgba(0, 0, 0, 0.5)',
+                        //shadowBlur: 5,
+                    } 
+                    });
+                //values.push(1+Math.round(v/6));
+            }
+            var nodes = [];
+            var labels = [];
+            $.each(vertices, function (k, v) { 
+                console.log(k, v);
+                nodes.push({
+                    'name': k,
+                    'value': v,
+                    'catogery': categories[k],
+                    'symbol': categories_symbols[categories[k]],
+                    'symbolSize': v, //v*40 / v_max + 1, 
+                    'itemStyle': {
+                        'color': categories_colors[categories[k]],
+                    },
+                });
+                labels.push({
+                    //'name': categories_names[categories[k]],
+                    //'keyword': '',
+                    //'base': categories_names[categories[k]],
+                    'show': true,
+                })
+            });
+            graph['links'] = links;
+            graph['data'] = nodes;
+            graph['label'] = labels;
+            return graph;
+        }
+
+        function drawGraph(graph) {
+            var myChart = echarts.init(document.getElementById("kg_result"));
+            console.log(graph.data)
+            var option = {
+                tooltip: {},
+                series: [
+                    {
+                        type: 'graph',
+                        layout: 'force',
+                        circular: {
+                            rotateLabel: true,
+                        },
+                        symbolSize: 30,
+                        data: graph.data,
+                        links: graph.links,
+                        edgeSymbol: ['none', 'arrow'],
+                        roam: true,
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'right',
+                                formatter: function (e) {
+                                    return e['data']['value'];
+                                }
+                            }
+                        },
+                        categories: graph.label,
+                        focusNodeAdjacency: true,
+                        edgeLabel: {
+                            normal: {
+                                show: true,
+                                position: 'middle'
+                            }
+                        },
+                        force: {
+                            repulsion: 1000,
+                            edgeLength: 200
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
     </script>
 
     <style>
@@ -108,8 +243,25 @@
         footer {
             display: none;
         }
-    </style>
 
+        text {
+            font-style: normal;
+            pointer-events: none;
+        }
+
+        .tippy-popper {
+            font-style: italic;
+        }
+
+        circle {
+            stroke-width: 1.5px;
+        }
+
+        line {
+            stroke: #999;
+            stroke-width: 1.5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -127,9 +279,9 @@
                         <div class="card-body">
                             <div class="btn-group">
                                 <input type="submit" class="btn btn-default btn-outline-dark"
-                                onclick="$('#use_builtin').val('/static/FoodSafetyAriticles.xlsx');" value="Article Level" />
+                                onclick="$('#use_builtin').val('/static/FoodSafetyAriticles.xlsx'); $('#command_type').val('table');" value="Article Level" />
                                 <input type="submit" class="btn btn-default btn-outline-dark"
-                                onclick="$('#use_builtin').val('/static/FoodSafetySentences_jiagu.xlsx');" value="Sentence Level" />
+                                onclick="$('#use_builtin').val('/static/FoodSafetySentences_jiagu.xlsx'); $('#command_type').val('table');" value="Sentence Level" />
                             </div>
                         </div>
                     </div>
@@ -152,10 +304,9 @@
 
                             <div class="btn-group">
                                 <input class="btn btn-default btn-outline-dark" type="submit"
-                                    onclick="$('#use_builtin').val('');" value="Upload" />
+                                    onclick="$('#use_builtin').val(''); $('#command_type').val('table');" value="Upload" />
                                 <!--input class="btn btn-default btn-outline-dark" type="submit" value="Test with sample file" /-->
                             </div>
-
                         </div>
                     </div>
 
@@ -196,12 +347,12 @@
 
                             <br />
                             <input type="hidden" id="use_builtin" name="use_builtin" value="" />
-                            <input type="submit" class="btn btn-default btn-outline-dark"
-                                onclick="$('#use_builtin').val('/static/Associations_jiagu.csv');" value="Draw" />
-
-                            <a href="/forcetree" class="btn btn-default btn-outline-dark">Force tree</a>
-                            <a href="/forcezoompan" class="btn btn-default btn-outline-dark">Force zoom/pan</a>
-                            <a href="/forcezoompan2" class="btn btn-default btn-outline-dark">Force zoom/pan 2</a>
+                            <input type="hidden" id="command_type" name="command_type" value="" />
+                            
+                            <textarea id="graph-input" class="form-control" rows="8">{{ associations }}</textarea>
+                            <!--e.g., [ ['鳊鱼', '恩诺沙星', 1], ['鳊鱼', '孔雀石绿', 2]] -->
+                            <input type="button" class="btn btn-default btn-outline-dark"
+                                onclick="draw();" value="Draw" />
                         </div>
                     </div>
 
@@ -220,7 +371,7 @@
                 <div class="card">
                     <h6 class="card-header">Result</h6>
                     <div class="card-body">
-                        <div id="kg_result">
+                        <div id="kg_result" style="height: 800px; border:1px dashed;">
                         </div>
                     </div>
                 </div>
