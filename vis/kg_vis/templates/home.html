@@ -78,8 +78,7 @@
             var graph = {};
             var vertices = {};
             var categories = {};
-            var categories_colors = ['rgba(80, 128, 128, 1)',
-                'rgba(128, 80, 80, 1)'];
+            var categories_colors = [$('#vertice_color1').val(), $('#vertice_color2').val()] // ['rgba(80, 128, 128, 1)', 'rgba(128, 80, 80, 1)'];
             var categories_symbols = ['circle', 'diamond']; // 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
             var categories_symbolSizes = {};
             var categories_names = ['Food', 'Chemical'];
@@ -134,6 +133,7 @@
                     'lineStyle': {
                         'width': v / min_sup + 1, // to avoid too thick edges
                         'curveness': 0.1, // between 0 and 1
+                        'color': $('#edge_color').val(), 
                         //shadowColor: 'rgba(0, 0, 0, 0.5)',
                         //shadowBlur: 5,
                     } 
@@ -356,6 +356,26 @@
                             <div class="row">
                                 <input type="range" min="1" max="200" value="20" class="slider"
                                     oninput="$('#min_sup_label').html(this.value);" id="min_sup" name="min_sup">
+                            </div>
+
+                            <br/>
+
+                            <div class="row">
+                                &nbsp;&nbsp; Type I Vertice Color: &nbsp;&nbsp;
+                                <input type="color" id="vertice_color1" onchange="clickColor(0, -1, -1, 5)" 
+                                value="#408080" style="width:50px;">                                
+                            </div>
+
+                            <div class="row">
+                                &nbsp;&nbsp; Type II Vertice Color: &nbsp;&nbsp;
+                                <input type="color" id="vertice_color2" onchange="clickColor(0, -1, -1, 5)" 
+                                value="#804040" style="width:50px;">
+                            </div>
+
+                            <div class="row">
+                                &nbsp;&nbsp; Edge Color: &nbsp;&nbsp;
+                                <input type="color" id="edge_color" onchange="clickColor(0, -1, -1, 5)" 
+                                value="#000000" style="width:50px;">                            
                             </div>
 
                             <br />
