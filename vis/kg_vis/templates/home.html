@@ -5,12 +5,12 @@
     <title>KG-VIS</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/static/bootstrap.css">
-    <script src="/static/jquery-3.3.1.min.js"></script>
-    <script src="/static/bootstrap.js"></script>
-    <script src="/static/jquery.blockUI.js"></script>
-    <script src="/static/jquery.form.min.js"></script>
-    <script src="/static/echarts.min.js"></script>
+    <link rel="stylesheet" href="../static/bootstrap.css">
+    <script src="../static/jquery-3.3.1.min.js"></script>
+    <script src="../static/bootstrap.js"></script>
+    <script src="../static/jquery.blockUI.js"></script>
+    <script src="../static/jquery.form.min.js"></script>
+    <script src="../static/echarts.min.js"></script>
 
     <script>
         $(function () {
@@ -61,13 +61,41 @@
         });
 
         function translate_gui(lan){
+            let chineseArray = ['浏览主题语料库','选择语言','文章级别','句子级别','使用自定义的语料库','上传文件需符合指定的excel格式','知识图谱可视化（力导向图）','最小支持度','食品节点&nbsp;&nbsp;','添加剂节点&nbsp;&nbsp;','语义关联&nbsp;&nbsp;','可视化结果','绘制','上传','点击此处上传...']
+            let englishArray = ['View Corpse','Change Language','Article Level','Sentence Level','Use Your Own Corpse', 'The file should be the Excel format.','Force Directed Graph','Minimum Support','&nbsp;&nbsp; Type I Vertice Color: &nbsp;&nbsp;','&nbsp;&nbsp; Type II Vertice Color: &nbsp;&nbsp;','Edge Color: ','Result','Draw','Upload','click here to upload ...']
             if (lan == 'cn'){
-                $('#btn_draw').val('绘制');
-                $('#header_corpse').html('浏览主题语料库');
+                 $('#header_corpse').html(chineseArray[0]);
+                 $('.language_box').html(chineseArray[1]);
+                 $('#btn_article_level').val(chineseArray[2]);
+                 $('#btn_sentence_level').val(chineseArray[3]);
+                 $('#header_user_corpse').html(chineseArray[4]);
+                 $('#desc_file_format').html(chineseArray[5]);
+                 $('#header_fdg').html(chineseArray[6]);
+                 $('#desc_min_supp').html(chineseArray[7]);
+                 $('#desc_v1_color').html(chineseArray[8]);
+                 $('#desc_v2_color').html(chineseArray[9]);
+                 $('#desc_edge_color').html(chineseArray[10]);
+                 $('#header_result').html(chineseArray[11]);
+                 $('#btn_draw').val(chineseArray[12]);
+                 $('#btn_upload').val(chineseArray[13]);
+                 $('#dataFileCover').val(chineseArray[14]);
             }
             else{
-                $('#btn_draw').val('Draw');
-                $('#header_corpse').html('View Corpse');
+                 $('#header_corpse').html(englishArray[0]);
+                 $('.language_box').html(englishArray[1]);
+                 $('#btn_article_level').val(englishArray[2]);
+                 $('#btn_sentence_level').val(englishArray[3]);
+                 $('#header_user_corpse').html(englishArray[4]);
+                 $('#desc_file_format').html(englishArray[5]);
+                 $('#header_fdg').html(englishArray[6]);
+                 $('#desc_min_supp').html(englishArray[7]);
+                 $('#desc_v1_color').html(englishArrsay[8]);
+                 $('#desc_v2_color').html(englishArray[9]);
+                 $('#desc_edge_color').html(englishArray[10]);
+                 $('#header_result').html(englishArray[11]);
+                 $('#btn_draw').val(englishArray[12]);
+                 $('#btn_upload').val(englishArray[13]);
+                 $('#dataFileCover').val(englishArray[14]);
             }
         }
 
@@ -141,7 +169,7 @@
                 links.push({
                     'source': s, 'target': t, 'value': v,
                     'lineStyle': {
-                        'width': v / min_sup + 1, // to avoid too thick edges
+                        'width': v  / min_sup + 1, // to avoid too thick edges     .(生成鳊鱼与添加剂图的时候用到的参数)'width': v * 0.07 / min_sup + 3, // to avoid too thick edges
                         'curveness': 0.1, // between 0 and 1
                         'color': $('#edge_color').val(), 
                         //shadowColor: 'rgba(0, 0, 0, 0.5)',
@@ -153,7 +181,7 @@
             var nodes = [];
             var labels = [];
             $.each(vertices, function (k, v) { 
-                console.log(k, v);
+                // console.log(k, v);
                 nodes.push({
                     'name': k,
                     'value': v,
@@ -179,7 +207,7 @@
 
         function drawGraph(graph) {
             var myChart = echarts.init(document.getElementById("kg_result"));
-            console.log(graph.data)
+            // console.log(graph.data)
             var option = {
                 tooltip: {},
                 series: [
@@ -301,21 +329,21 @@
 
                         <div class="card-body">
                             <div class="btn-group">
-                                <input type="submit" class="btn btn-default btn-outline-dark"
+                                <input type="submit" id="btn_article_level" class="btn btn-default btn-outline-dark"
                                 onclick="$('#use_builtin').val('/static/FoodSafetyAriticles.xlsx'); $('#command_type').val('table');" value="Article Level" />
-                                <input type="submit" class="btn btn-default btn-outline-dark"
+                                <input type="submit" id="btn_sentence_level" class="btn btn-default btn-outline-dark"
                                 onclick="$('#use_builtin').val('/static/FoodSafetySentences_jiagu.xlsx'); $('#command_type').val('table');" value="Sentence Level" />
                             </div>
                         </div>
                     </div>
 
                     <div class="card">
-                        <h6 class="card-header">
+                        <h6 class="card-header" id="header_user_corpse">
                             Use Your Own Corpse
                         </h6>
 
                         <div class="card-body">
-                            <p>
+                            <p id = "desc_file_format">
                                 The file should be the Excel format.
                             </p>
 
@@ -336,7 +364,7 @@
                     <br/>
 
                     <div class="card">
-                        <h6 class="card-header">
+                        <h6 class="card-header" id="header_fdg">
                             Force Directed Graph
                         </h6>
 
@@ -358,7 +386,7 @@
                             <br />
 
                             <h6>
-                                <span>Minimum Support</span> <span class="font-italic font-weight-bold">min_sup</span>
+                                <span id="desc_min_supp">Minimum Support</span> <span class="font-italic font-weight-bold">min_sup</span>
                                 <span id="min_sup_label" class="badge badge-pill badge-secondary">
                                     20
                                 </span>
@@ -370,20 +398,20 @@
 
                             <br/>
 
-                            <div class="row">
-                                &nbsp;&nbsp; Type I Vertice Color: &nbsp;&nbsp;
+                            <div class="row"> 
+                                <span id="desc_v1_color">&nbsp;&nbsp; Type I Vertice Color: &nbsp;&nbsp;</span>
                                 <input type="color" id="vertice_color1" onchange="clickColor(0, -1, -1, 5)" 
                                 value="#408080" style="width:50px;">                                
                             </div>
 
-                            <div class="row">
-                                &nbsp;&nbsp; Type II Vertice Color: &nbsp;&nbsp;
+                            <div class="row" >
+                                <span id="desc_v2_color">&nbsp;&nbsp; Type II Vertice Color: &nbsp;&nbsp;</span>
                                 <input type="color" id="vertice_color2" onchange="clickColor(0, -1, -1, 5)" 
                                 value="#804040" style="width:50px;">
                             </div>
 
-                            <div class="row">
-                                &nbsp;&nbsp; Edge Color: &nbsp;&nbsp;
+                            <div class="row" >
+                                <span id="desc_edge_color">&nbsp;&nbsp; Edge Color: &nbsp;&nbsp;</span>
                                 <input type="color" id="edge_color" onchange="clickColor(0, -1, -1, 5)" 
                                 value="#000000" style="width:50px;">                            
                             </div>
@@ -406,15 +434,15 @@
                 </form>
 
                 <div class="card">
-                    <h6 class="card-header">
+                    <h6 class="language_box card-header">
                         Change Language
                     </h6>
 
                     <div class="card-body">
                         <div class="btn-group">
-                            <input type="button" class="btn btn-default btn-outline-dark"
+                            <input type="button" class=" btn btn-default btn-outline-dark"
                                 onclick="translate_gui('cn')" value="中文" />
-                            <input type="button" class="btn btn-default btn-outline-dark"
+                            <input type="button" class=" btn btn-default btn-outline-dark"
                                 onclick="translate_gui('en')" value="English" />
                         </div>
                     </div>
@@ -429,7 +457,7 @@
             </div>
             <div class="col-9">
                 <div class="card">
-                    <h6 class="card-header">Result</h6>
+                    <h6 class="card-header" id="header_result">Result</h6>
                     <div class="card-body">
                         <div id="kg_result" style="width: 100%; min-height: 900px; border:1px dashed;">
                         </div>
